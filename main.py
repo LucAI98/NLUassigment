@@ -1,16 +1,26 @@
-# This is a sample Python script.
-
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import spacy
+from spacy import displacy
 
 
 def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+
+    print(f'Hi, {name}')
+
+    nlp = spacy.load('en_core_web_sm')
+
+    piano_text = 'Gus is learning piano with his teacher'
+    piano_doc = nlp(piano_text)
+    for token in piano_doc:
+        print(token.text, token.tag_, token.head.text, token.dep_)
+
+    # http://127.0.0.1:5000
+    displacy.serve(piano_doc, style='dep')
+
+# extract a path of dependency relations from the ROOT to a token
+def extractiom_root_token():
+    print('Boh')
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
