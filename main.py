@@ -8,7 +8,14 @@ def print_hi(name):
     nlp = spacy.load('en_core_web_sm')
 
     piano_text = 'Gus is learning piano with his teacher'
-    extraction_paths(piano_text)
+    # extraction_paths(piano_text)
+    trees = extraction_subtree_of_each_tokens(piano_text)
+    print(trees[1])
+    flag = is_subtree_of_sentence(trees[4], piano_text)
+    if flag is True:
+        print(True)
+    else:
+        print(False)
     """piano_doc = nlp(piano_text)
 
     for token in piano_doc:
@@ -36,9 +43,9 @@ def extractiom_root_token1(root, token, path):
         path.append(token)
 
 
-def extraction_paths(sentece):
+def extraction_paths(sentence):
     nlp = spacy.load('en_core_web_sm')
-    doc = nlp(sentece)
+    doc = nlp(sentence)
 
     paths = []
     root = search_root(doc)
@@ -55,7 +62,39 @@ def extraction_paths(sentece):
 def extraction_subtree(token):
     return list(token.subtree)
 
+
+def extraction_subtree_of_each_tokens(sentence):
+    nlp = spacy.load('en_core_web_sm')
+    doc = nlp(sentence)
+
+    subtrees = []
+    for token in doc:
+        subtrees.append(extraction_subtree(token))
+
+    return subtrees
+
+
 # check if a given list of tokens (segment of a sentence) forms a subtree
+def is_subtree_of_sentence(list_tokens, sentence):
+    subtrees = extraction_subtree_of_each_tokens(sentence)
+
+    for subtree in subtrees:
+        if compare_two_list(list_tokens, subtree) is True:
+            return True
+    return False
+
+
+def compare_two_list(l1, l2):
+    l1.sort()
+    l2.sort()
+
+    if len(l1) != len(l2):
+        return False
+    else:
+        for i in range(len(l1)):
+            if l1[i].text != l2[i].text:
+                return False
+        return True
 
 # identify head of a span, given its tokens
 
