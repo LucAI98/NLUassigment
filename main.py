@@ -10,7 +10,10 @@ def print_hi(name):
     piano_text = 'Gus is learning piano with his teacher'
     # extraction_paths(piano_text)
     trees = extraction_subtree_of_each_tokens(piano_text)
-    print(trees[1])
+    print(trees[4])
+    flag = is_subtree_of_sentence(trees[4], piano_text)
+    trees[4].pop(1)
+    print(trees[4])
     flag = is_subtree_of_sentence(trees[4], piano_text)
     if flag is True:
         print(True)
@@ -96,9 +99,31 @@ def compare_two_list(l1, l2):
                 return False
         return True
 
+
 # identify head of a span, given its tokens
+def head_span(span):
+    nlp = spacy.load('en_core_web_sm')
+    doc = nlp(span)
+
+    return search_root(doc)
+
 
 # extract sentence subject, direct object and indirect object spans
+def extract_el_in_spans(sentence):
+    nlp = spacy.load('en_core_web_sm')
+    doc = nlp(sentence)
+
+    doc.spans["nsubj"] = []
+    doc.spans["dobj"] = []
+    doc.spans["iobj"] = []
+
+    for token in doc:
+        if token.dep_ == 'nsubj':
+            print()
+        elif token.dep_ == 'dobj':
+            print()
+        elif token.dep_ == 'iobj':
+            print()
 
 
 def to_nltk_tree(node):
