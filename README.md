@@ -9,6 +9,7 @@ To install spaCy with pip on Windows run the following commands:
 ```sh
 pip install -U spacy
 python -m spacy download en_core_web_sm
+pip install nltk
 ```
 
 For different configurations please refer to the page: https://spacy.io/usage
