@@ -1,7 +1,6 @@
 # Report
 
-The functions implemented in this code are made with the help of spacy library and
-they are tested with `Gus is learning piano with his teacher.` sentence.
+The functions implemented in this code are made with the help of spacy library.
 
 ## extraction_paths(sentence)
 The function takes in input a sentence and prints the relations between each token in the sentence from the root to the token.
@@ -110,4 +109,38 @@ def extract_info_in_spans(sentence):
             dict_list[token.dep_] = span_list
 
     return dict_list
+```
+# Output
+When you start the program all these functions are tested with `Gus is learning piano with his teacher.` sentence:
+```
+ --- Paths for each tokens ---
+learning(ROOT) ->  (nsubj)  Gus  
+learning(ROOT) ->  (aux)  is  
+learning(ROOT)  
+learning(ROOT) ->  (dobj)  piano  
+learning(ROOT) ->  (dobj)  piano ->  (prep)  with  
+learning(ROOT) ->  (dobj)  piano ->  (prep)  with ->  (pobj)  teacher ->  (poss)  his  
+learning(ROOT) ->  (dobj)  piano ->  (prep)  with ->  (pobj)  teacher  
+learning(ROOT) ->  (punct)  .  
+
+ --- Subtree for each tokens ---
+[Gus]
+[is]
+[Gus, is, learning, piano, with, his, teacher, .]
+[piano, with, his, teacher]
+[with, his, teacher]
+[his]
+[his, teacher]
+[.]
+
+ --- Check if a list of token is a subtree ---
+[with, his, teacher] True
+[with, teacher] False
+
+ --- Head of a span ---
+piano with
+piano
+
+ --- Extracted info of the sentence ---
+{'nsubj': 'Gus', 'dobj': 'piano with his teacher'}
 ```
