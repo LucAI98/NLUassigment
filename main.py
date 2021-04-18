@@ -53,6 +53,7 @@ def extractiom_root_token1(root, token, path):
         path.append(token)
 
 
+# extract the paths of dependency for each token
 def extraction_paths(sentence):
     nlp = spacy.load('en_core_web_sm')
     doc = nlp(sentence)
