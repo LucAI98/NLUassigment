@@ -6,29 +6,40 @@ from nltk import Tree
 def test_function():
     piano_text = 'Gus is learning piano with his teacher.'  # test sentence
 
+    # show the dependency tree of the sentence
     nlp = spacy.load('en_core_web_sm')
     piano_doc = nlp(piano_text)
     [to_nltk_tree(sent.root).pretty_print() for sent in piano_doc.sents]
 
-    extraction_paths(piano_text)
+    # first function
+    print('\n --- Paths for each tokens ---')
+    paths = extraction_paths(piano_text)
 
+    # second function
     trees = extraction_subtree_of_each_tokens(piano_text)
+    print('\n --- Subtree for each tokens ---')
+    for subtree in trees:
+        print(subtree)
 
-    print(trees[4])
+    # third function
+    print('\n --- Check if a list of token is a subtree ---')
     flag = is_subtree_of_sentence(trees[4], piano_text)
+    print_flag(flag, trees[4])
     trees[4].pop(1)
-    print(trees[4])
     flag = is_subtree_of_sentence(trees[4], piano_text)
-    if flag is True:
-        print(True)
-    else:
-        print(False)
+    print_flag(flag, trees[4])
 
+    # forth function
+    print('\n --- Head of a span ---')
+    print(piano_doc[3:5])
+    print(head_span(piano_doc[3:5].text))
+
+    # fifth function
+    print('\n --- Extracted info of the sentence ---')
     print(extract_info_in_spans(piano_text))
-    """
-    # extractiom_root_token(root, piano_doc[6])
-    # http://127.0.0.1:5000
-    # displacy.serve(piano_doc, style='dep')"""
+    """ Displacy potraits the dependency tree on the web page below
+    # http://127.0.0.1:5000 
+    displacy.serve(piano_doc, style='dep')"""
 
 
 # extract a path of dependency relations from the ROOT to a token
@@ -62,6 +73,7 @@ def extraction_subtree(token):
     return list(token.subtree)
 
 
+# extract the subtree for each token
 def extraction_subtree_of_each_tokens(sentence):
     nlp = spacy.load('en_core_web_sm')
     doc = nlp(sentence)
@@ -83,6 +95,7 @@ def is_subtree_of_sentence(list_tokens, sentence):
     return False
 
 
+# Compare two list element
 def compare_two_list(l1, l2):
     l1.sort()
     l2.sort()
@@ -137,6 +150,14 @@ def search_root(doc):
     return root
 
 
-# Press the green button in the gutter to run the script.
+def print_flag(flag, el):
+    if flag is True:
+        print(el, end=' ')
+        print(True)
+    else:
+        print(el, end=' ')
+        print(False)
+
+
 if __name__ == '__main__':
     test_function()
