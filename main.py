@@ -3,13 +3,17 @@ from spacy import displacy
 from nltk import Tree
 
 
-def print_hi(name):
+def test_function():
+    piano_text = 'Gus is learning piano with his teacher.'  # test sentence
 
     nlp = spacy.load('en_core_web_sm')
+    piano_doc = nlp(piano_text)
+    [to_nltk_tree(sent.root).pretty_print() for sent in piano_doc.sents]
 
-    piano_text = 'Gus is learning piano with his teacher'
-    # extraction_paths(piano_text)
+    extraction_paths(piano_text)
+
     trees = extraction_subtree_of_each_tokens(piano_text)
+
     print(trees[4])
     flag = is_subtree_of_sentence(trees[4], piano_text)
     trees[4].pop(1)
@@ -19,17 +23,9 @@ def print_hi(name):
         print(True)
     else:
         print(False)
-    """piano_doc = nlp(piano_text)
 
-    for token in piano_doc:
-        print(token.text, token.tag_, token.head.text, token.dep_)
-
-    [to_nltk_tree(sent.root).pretty_print() for sent in piano_doc.sents]
-    root = search_root(piano_doc)
-    sub = extraction_subtree(piano_doc[3])
-    for token in sub:
-        print(token.text, token.tag_, token.head.text, token.dep_)
-
+    print(extract_info_in_spans(piano_text))
+    """
     # extractiom_root_token(root, piano_doc[6])
     # http://127.0.0.1:5000
     # displacy.serve(piano_doc, style='dep')"""
@@ -109,23 +105,23 @@ def head_span(span):
 
 
 # extract sentence subject, direct object and indirect object spans
-def extract_el_in_spans(sentence):
+def extract_info_in_spans(sentence):
     nlp = spacy.load('en_core_web_sm')
     doc = nlp(sentence)
 
-    doc.spans["nsubj"] = []
-    doc.spans["dobj"] = []
-    doc.spans["iobj"] = []
-
+    dict_list = {}
     for token in doc:
-        if token.dep_ == 'nsubj':
-            print()
-        elif token.dep_ == 'dobj':
-            print()
-        elif token.dep_ == 'iobj':
-            print()
+        span_list = []
+        if token.dep_ == 'nsubj' or token.dep_ == 'dobj' or token.dep_ == 'iobj':
+            for descendant in token.subtree:
+                span_list.append(descendant.text)
+            span_list = ' '.join(span_list)
+            dict_list[token.dep_] = span_list
+
+    return dict_list
 
 
+# Prints the tree of a sentence
 def to_nltk_tree(node):
     if node.n_lefts + node.n_rights > 0:
         return Tree(node.orth_, [to_nltk_tree(child) for child in node.children])
@@ -143,4 +139,4 @@ def search_root(doc):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    test_function()
