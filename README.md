@@ -1,5 +1,5 @@
-# NLUAssignment1
-Assignment 1 for NLU course aa 2020/2021
+# NLUAssignment
+First Assignment for NLU course aa 2020/2021
 
 ## Requirements
 
