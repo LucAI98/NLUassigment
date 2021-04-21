@@ -126,7 +126,7 @@ def extract_info_in_spans(sentence):
     dict_list = {}
     for token in doc:
         span_list = []
-        if token.dep_ == 'nsubj' or token.dep_ == 'dobj' or token.dep_ == 'iobj':
+        if token.dep_ == 'nsubj' or token.dep_ == 'dobj' or token.dep_ == 'dative':
             for descendant in token.subtree:
                 span_list.append(descendant.text)
             span_list = ' '.join(span_list)
