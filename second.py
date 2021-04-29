@@ -13,8 +13,8 @@ def test_function():
 
     # read the corpus of the conll file
     test_sents = conll.read_corpus_conll('data/conll2003/test.txt', ' ')
-    train_sents = conll.read_corpus_conll('data/conll2003/train.txt', ' ')
-    chunks_test = conll.get_chunks('data/conll2003/test.txt', fs=' ')
+    # train_sents = conll.read_corpus_conll('data/conll2003/train.txt', ' ')
+    # chunks_test = conll.get_chunks('data/conll2003/test.txt', fs=' ')
 
     list_of_token = cut_separator(test_sents)
     doc_list = load_list_into_spacy(nlp, list_of_token)
@@ -136,7 +136,7 @@ def accuracy(refs, hyps):
     return accuracy_class
 
 
-# group entities that belogs to the same chunks
+# group entities that belong to the same chunks
 def grouping_entities(doc):
 
     chunks = list(doc.noun_chunks)
@@ -177,6 +177,7 @@ def grouping_entities(doc):
     return entity_group
 
 
+# compute the frequency of the entity group (the class are all counted as different).
 def frequency_check(entity_group):
     frequency_dict = {}
 
@@ -196,6 +197,7 @@ def frequency_check(entity_group):
     return frequency_dict
 
 
+# extend noun if the dep_ is compound following IOB scheme
 def extend_noun_compound(doc):
 
     ent_iob = [t.ent_iob_ for t in doc]
@@ -203,8 +205,10 @@ def extend_noun_compound(doc):
 
     for token in doc:
 
-        if token.dep_ == 'compound' and token.head.ent_type_ != "":
-            ent_types[token.i] = token.head.ent_type_
+        if token.dep_ == 'compound' and token.head.ent_type_ != "":     # check the dependencies
+            ent_types[token.i] = token.head.ent_type_                   # change the entity
+
+            # put the IOB tag
             if token.head.i < token.i:
                 ent_iob[token.i] = 'I'
             elif token.head.ent_iob_ == 'B':
@@ -212,6 +216,7 @@ def extend_noun_compound(doc):
                 ent_iob[token.i] = 'B'
             else:
                 ent_iob[token.i] = 'B'
+
     a = [(t.text, ent_iob + ("-" if ent_type != "" else "") + map.spacy_to_conll[ent_type]) for t, ent_iob, ent_type in
                     zip(doc, ent_iob, ent_types)]
     return a
